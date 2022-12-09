@@ -1,8 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-// import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { Box, Badge, IconButton } from "@mui/material";
-import { theme } from "../../themes";
+import { shades } from "../../themes";
+import { setCartOpen } from "../../state/Slicer";
 import {
   PersonOutlined,
   ShoppingBagOutlined,
@@ -12,12 +13,9 @@ import {
 
 const Nabar = () => {
   const navigate = useNavigate();
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  const icons = { PersonOutlined,
-    ShoppingBagOutlined,
-    SearchOutlined,
-    MenuOutlined,}
+  const cart = useSelector((state) => state.cart.cart);
 
   return (
     <>
@@ -43,7 +41,7 @@ const Nabar = () => {
           <Box
             onClick={() => navigate("/")}
             sx={{ "&:hover": { cursor: "pointer" } }}
-            //   color={shades.secondary[500]}
+            color={shades.secondary[500]}
           >
             JAutos
           </Box>
@@ -62,19 +60,36 @@ const Nabar = () => {
               <PersonOutlined />
             </IconButton>
 
-            <IconButton sx={{ color: "black" }}>
-              <ShoppingBagOutlined />
-            </IconButton>
-
+            <Badge
+              badgeContent={cart.length}
+              color="secondary"
+              isvisible={cart.toString(cart.length === 0)}
+              sx={{
+                "& .MuiBadge-root": {
+                  height: "15px",
+                  padding: "0, 4px",
+                  right: 5,
+                  left: 5,
+                  minWidth: "15px"
+                },
+              }}
+            >
+              <IconButton
+                onClick={() => dispatch(setCartOpen({}))}
+                sx={{ color: "black" }}
+              >
+                <ShoppingBagOutlined />
+              </IconButton>
+            </Badge>
+       
             <IconButton sx={{ color: "black" }}>
               <MenuOutlined />
             </IconButton>
-
           </Box>
         </Box>
       </Box>
     </>
   );
-}
+};
 
 export default Nabar;
